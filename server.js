@@ -17,6 +17,7 @@ const passUserToView = require("./middleware/pass-user-to-view.js");
 // Controllers
 const authController = require('./controllers/auth.js');
 const listingsController = require('./controllers/listings');
+const usersController = require('./controllers/users.js');
 
 // Set the port from environment variable or default to 3000
 const port = process.env.PORT ? process.env.PORT : '3000';
@@ -54,6 +55,7 @@ app.get('/', (req, res) => {
 
 app.use('/auth', authController);
 app.use('/listings', listingsController);
+app.use('/users', isSignedIn, usersController);
 
 // PROTECTED
 
