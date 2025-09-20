@@ -14,6 +14,7 @@
     <p>House Size: <%= listing.size %> sq ft</p>
     <p>Price: $<%= listing.price %></p>
     <p>Street address: <%= listing.streetAddress %></p>
+
     <h2>Owner</h2>
     <% if(listing.owner._id.equals(user._id)) { %> <!-- .equals is a mongoose method that allowes us to do comparisons, user._id is the id of the current session (my id, the one I used to sign-in) -->
         <p>You own this!</p>
@@ -23,6 +24,24 @@
         </form>
     <% } else { %>
         <p>You don't own this, <%= listing.owner.username %> does!</p>
+    <% } %>
+
+    <h2>Favourites</h2>
+    <p>Favourited by <%= listing.favouritedByUsers.length %> people.</p> <!--Since favouritedByUsers is an array of user objects, we can use .length to get the number of users that favourited this listing-->
+    
+    <% if(userHasFavourited) { %>
+        <p>You've favourited this listing!</p>
+        
+        <form action="/listings/<%= listing._id %>/favourited-by/<%= user._id %>?_method=DELETE" method="POST">
+            <button type="submit">Unfavourite it</button>
+        </form>
+
+    <% } else { %>
+        <p>You haven't favourited this listing.</p>
+
+        <form action="/listings/<%= listing._id %>/favourited-by/<%= user._id %>" method="POST">
+            <button type="submit">Favourite it!</button>
+        </form>
     <% } %>
 </body>
 </html>

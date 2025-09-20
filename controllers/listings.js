@@ -29,8 +29,12 @@ router.get('/:listingId', async (req, res) => {
     try {
         const listingId = req.params.listingId;
         const populatedListings = await Listing.findById(listingId).populate('owner'); //make sure to populate (extraxt details of the owner/user)
+        const userHasFavourited = populatedListings.favouritedByUsers.some((user) =>
+            user.equals(req.session.user._id)
+        ); // checks if current user have favourited this listing or not (if it matched at least one user, it will return true, otherwise, false)
         res.render('Listings/show.ejs', {
             listing: populatedListings,
+            userHasFavourited,
         });
     } catch (error) {
         console.log(error);
@@ -82,6 +86,38 @@ router.put('/:listingId', async (req, res) => {
     } catch (error) {
        console.log(error);
        res.redirect('/'); 
+    }
+});
+
+router.post('/:listingId/favourited-by/:userId', async (req, res) => {
+    try {
+        const listingId = req.params.listingId;
+        const userId = req.params.userId;
+
+        await Listing.findByIdAndUpdate(listingId, {
+            $push: { favouritedByUsers: userId}, // since favouritedByUsers is an array we'll have to use push to add the passed user's parameter (my current user) to the favouritedByUsers array only (update it)
+        });
+        res.redirect(`/listings/${listingId}`);
+
+    } catch (error) {
+        console.log(error);
+        res.redirect('/');
+
+    }
+});
+
+router.delete('/:listingId/favourited-by/:userId', async (req, res) => {
+    try {
+        const listingId = req.params.listingId;
+        const userId = req.params.userId;
+
+        await Listing.findByIdAndUpdate(listingId, {
+            $pull: { favouritedByUsers: userId }, // remove all user's record that match the passed parameter (current user user._id)
+        });
+        res.redirect(`/listings/${listingId}`);
+    } catch (error) {
+        console.log(error);
+        res.redirect('/');
     }
 });
 
