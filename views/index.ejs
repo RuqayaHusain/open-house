@@ -9,6 +9,7 @@
 <% if (user) { %>
 <h1>Welcome to the app, <%= user.username %>!</h1>
 <p>
+  <a href="/listings">View all Listings</a>
   <a href="/auth/sign-out">Sign out</a>
 </p>
 <% } else { %>
