@@ -4,18 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit <%= listing.name %></title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
 </head>
 <body>
-    <%- include('../partials/_navbar.ejs') %>
-    <h1>Edit a Listing!</h1>
+  <%- include('../partials/_navbar.ejs') %>
+  <div class="new-container">
+    <div class="new-form-container">
+      <h1>Edit listing</h1>
+      <form action="/listings/<%= listing._id %>?_method=PUT" method="POST">
 
-    <form action="/listings/<%= listing._id %>?_method=PUT" method="POST">
         <label for="streetAddress">Street address:</label>
         <input type="text" name="streetAddress" id="street" value="<%= listing.streetAddress %>"/>
-        
+
         <label for="city">City:</label>
         <input type="text" name="city" id="city" value="<%= listing.city %>" />
-        
+
         <label for="price">Price:</label>
         <input type="number" name="price" id="price" value="<%= listing.price %>" min="0"/>
 
@@ -23,6 +26,9 @@
         <input type="number" name="size" id="size" value="<%= listing.size %>" min="0"/>
 
         <button type="submit">Edit Listing</button>
-    </form>
+        
+      </form>
+    </div>
+  </div>
 </body>
 </html>
